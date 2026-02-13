@@ -1,0 +1,28 @@
+name: STM32 Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Install ARM GCC Toolchain
+      run: |
+        sudo apt update
+        sudo apt install -y gcc-arm-none-eabi make
+
+    - name: Build project
+      run: make
+
+    - name: Upload firmware
+      uses: actions/upload-artifact@v4
+      with:
+        name: stm32-firmware
+        path: build/*.bin
